@@ -13,16 +13,7 @@ void Transaction::print() const {
     std::cout << std::endl;
 }
 
-void readFile(std::string& data, const std::string& path) {
-    std::ifstream file(path);
-    std::string line;
-    while(getline(file, line)) {
-        data += line + "\n";
-    }
-    file.close();
-}
-
-Transaction readTransaction(const std::string& line) {
+Transaction Transaction::readTransaction(const std::string& line) {
     Transaction transaction;
     if(line.length() < 9) {
         throw std::invalid_argument("Transaction too short: " + line);
@@ -44,9 +35,19 @@ Transaction readTransaction(const std::string& line) {
     return transaction;
 }
 
-void getTransactions(std::map<char, Transaction>& transactions, const std::string& file) {
+void Transaction::readFile(std::string &data, const std::string &path) {
+    std::ifstream file(path);
+    std::string line;
+    while(getline(file, line)) {
+        data += line + "\n";
+    }
+    file.close();
+}
+
+
+void Transaction::getTransactions(std::map<char, Transaction>& transactions, const std::string& path) {
     std::string transactionsRaw;
-    readFile(transactionsRaw, file);
+    readFile(transactionsRaw, path);
     std::stringstream stream(transactionsRaw);
     for(std::string line; std::getline(stream, line);) {
         Transaction transaction = readTransaction(line);
@@ -56,3 +57,8 @@ void getTransactions(std::map<char, Transaction>& transactions, const std::strin
         transactions[transaction.id] = transaction;
     }
 }
+
+bool Transaction::areDependent(const Transaction &first, const Transaction &second) {
+    return first.dependencies.contains(second.result) || second.dependencies.contains(first.result);
+}
+
