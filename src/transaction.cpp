@@ -45,7 +45,8 @@ void Transaction::readFile(std::string &data, const std::string &path) {
 }
 
 
-void Transaction::getTransactions(std::map<char, Transaction>& transactions, const std::string& path) {
+std::map<char, Transaction> Transaction::getTransactions(const std::string& path, const std::set<char>& alphabet) {
+    std::map<char, Transaction> transactions;
     std::string transactionsRaw;
     readFile(transactionsRaw, path);
     std::stringstream stream(transactionsRaw);
@@ -54,8 +55,12 @@ void Transaction::getTransactions(std::map<char, Transaction>& transactions, con
         if(transactions.contains(transaction.id)) {
             throw std::invalid_argument("Transaction already exists: " + transaction.id);
         }
+        if(!alphabet.contains(transaction.id)) {
+            throw std::invalid_argument("Transaction id doesn't belong to alphabet: " + transaction.id);
+        }
         transactions[transaction.id] = transaction;
     }
+    return transactions;
 }
 
 bool Transaction::areDependent(const Transaction &first, const Transaction &second) {

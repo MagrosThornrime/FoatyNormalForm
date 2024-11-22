@@ -9,7 +9,7 @@ struct Transaction {
     std::set<char> dependencies;
 
     static bool areDependent(const Transaction& first, const Transaction& second);
-    static void getTransactions(std::map<char, Transaction>& transactions, const std::string& path);
+    static std::map<char, Transaction> getTransactions(const std::string& path, const std::set<char>& alphabet);
     void print() const;
 
 private:
