@@ -143,5 +143,3 @@ digraph g {
 7[label=e]
 }
 ```
-
-Do you also want me to shorten this into a **GitHub-friendly README** (with just features, build instructions, and example) so it’s lighter, or keep the full academic-style detail?
